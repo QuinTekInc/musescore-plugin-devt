@@ -410,46 +410,47 @@ MuseScore {
         var cursor = curScore.newCursor()
 
         for(var staff=0; staff<curScore.nstaves; staff++){
-        for(var voice=0; voice<4; voice++){
+            for(var voice=0; voice<4; voice++){
 
-            cursor.staffIdx = staff
-            cursor.voice = voice
-            cursor.rewind(0)
+                cursor.staffIdx = staff
+                cursor.voice = voice
+                cursor.rewind(0)
 
-            var currentClef = 0 //treble clef by default
+                var currentClef = 0 //treble clef by default
 
-            var scale = chromaticScaleFromKey(cursor.keySignature)
+                var scale = chromaticScaleFromKey(cursor.keySignature)
 
-            while(cursor.segment){
+                while(cursor.segment){
 
 
-                for (var i = 0; i < cursor.segment.annotations.length; i++) {
-                    var ann = cursor.segment.annotations[i];
-                    if (ann.type === Element.CLEF || ann.type === Element.HEADERCLEF) {
-                        currentClef = ann.clefType;
-                        console.log('Found clef changes')
+                    for (var i = 0; i < cursor.segment.annotations.length; i++) {
+                        var ann = cursor.segment.annotations[i];
+                        if (ann.type === Element.CLEF || ann.type === Element.HEADERCLEF) {
+                            currentClef = ann.clefType;
+                            console.log('Found clef changes')
+                        }
                     }
-                }
 
-                if(cursor.keySignature!==undefined)
-                    scale = chromaticScaleFromKey(cursor.keySignature)
+                    if(cursor.keySignature!==undefined)
+                        scale = chromaticScaleFromKey(cursor.keySignature)
 
-                if(cursor.element && cursor.element.type===Element.CHORD){
+                    if(cursor.element && cursor.element.type===Element.CHORD){
 
-                    var txt = renderChord(cursor.element,scale, currentClef)
+                        var txt = renderChord(cursor.element,scale, currentClef)
 
-                    if(txt){
+                        if(txt){
 
-                        if(voice==1 || voice==3)
-                            txt.placement = Placement.BELOW
+                            if(voice==1 || voice==3)
+                                txt.placement = Placement.BELOW
 
-                        cursor.add(txt)
+                            cursor.add(txt)
+                        }
                     }
-                }
 
-                cursor.next()
+                    cursor.next()
+                }
             }
-        }}
+        }
 
         curScore.endCmd()
         Qt.quit()
