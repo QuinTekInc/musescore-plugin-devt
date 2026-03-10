@@ -302,7 +302,10 @@ MuseScore {
         var diffForward = (pitchChromOffset - writtenChromOffset) % 12
     
         //find the differcence when moving forward
-        var diffRev = diffForward - 12
+        //var diffRev = diffForward - 12
+        var diffRev = stepBackward(pitchLetter, musicLetter, scale)
+        
+        console.log(diffRev)
         
 
         //get the least absolute value among the two differences
@@ -311,6 +314,31 @@ MuseScore {
 
         return transp
         
+    }
+
+    function stepBackward(pLetter, wLetter, scale){
+
+        if(scale.indexOf(pLetter) === -1) pLetter = enharmonic[pLetter]
+
+        var startIndex = scale.indexOf(pLetter)
+        var currentIndex = startIndex
+
+        var steps = 0
+
+        while(scale[currentIndex] != wLetter){
+
+            currentIndex -= 1
+
+            if(currentIndex < 0){
+                currentIndex = scale.length - 1
+            }
+
+            steps += 1
+        }
+
+
+        return steps
+
     }
 
    
